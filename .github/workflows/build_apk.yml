@@ -14,13 +14,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Updated to v6 for full Node 24 support
       - name: Checkout repository
-        uses: actions/checkout@v4 # Note: If you still see a warning, ensure you are using the latest patch, or switch to the newest major version available (e.g., v6) if your specific repo allows.
+        uses: actions/checkout@v4
 
-      # Updated to v5 for full Node 24 support
       - name: Set up JDK 17
-        uses: actions/setup-java@v4 # Check for @v5 if your environment flags this!
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Grant execute permission for Gradle Wrapper
         run: chmod +x ./gradlew
@@ -28,9 +32,8 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew assembleDebug
 
-      # Updated to v5 for full Node 24 support
       - name: Upload APK
-        uses: actions/upload-artifact@v4 # Check for @v5 if your environment flags this!
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
